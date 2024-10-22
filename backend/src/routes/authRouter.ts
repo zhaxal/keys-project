@@ -95,7 +95,7 @@ authRouter.post("/register", async (req, res) => {
   res.send({ token });
 });
 
-authRouter.post("/refresh", async (req, res) => {
+authRouter.get("/refresh", async (req, res) => {
   const token = req.headers.authorization;
 
   if (!token) {
@@ -112,16 +112,48 @@ authRouter.post("/refresh", async (req, res) => {
     return;
   }
 
+  const newToken = uuidv4();
+
   await usersSessionsCollection.updateOne(
     { token },
     {
       $set: {
+        token: newToken,
         updatedAt: new Date(),
       },
     }
   );
 
-  res.send("Token refreshed");
+  res.send({ token: newToken });
+});
+
+authRouter.get("/me", async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    res.status(400).send("Token is required");
+    return;
+  }
+
+  const userSession = await usersSessionsCollection.findOne({
+    token,
+  });
+
+  if (!userSession) {
+    res.status(401).send("Invalid token");
+    return;
+  }
+
+  const user = await usersCollection.findOne({
+    _id: userSession.userId,
+  });
+
+  if (!user) {
+    res.status(404).send("User not found");
+    return;
+  }
+
+  res.send({ login: user.login });
 });
 
 export default authRouter;

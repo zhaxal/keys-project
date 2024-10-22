@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcryptjs";
 import { usersCollection, usersSessionsCollection } from "../database";
 
 const authRouter = Router();
@@ -12,7 +13,10 @@ authRouter.post("/login", async (req, res) => {
     return;
   }
 
-  const user = await usersCollection.findOne({ login, password });
+  const user = await usersCollection.findOne({
+    login,
+    password: bcrypt.hashSync(password, 8),
+  });
 
   if (!user) {
     res.status(401).send("Invalid login or password");
@@ -77,7 +81,7 @@ authRouter.post("/register", async (req, res) => {
 
   const newUser = await usersCollection.insertOne({
     login,
-    password,
+    password: bcrypt.hashSync(password, 8),
     apiToken: uuidv4(),
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -112,17 +116,32 @@ authRouter.get("/refresh", async (req, res) => {
     return;
   }
 
-  const newToken = uuidv4();
+  const tokenAge = Date.now() - new Date(userSession.updatedAt).getTime();
+  const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
 
-  await usersSessionsCollection.updateOne(
-    { token },
-    {
-      $set: {
-        token: newToken,
-        updatedAt: new Date(),
-      },
-    }
-  );
+  let newToken = token;
+
+  if (tokenAge > oneDayInMilliseconds) {
+    newToken = uuidv4();
+    await usersSessionsCollection.updateOne(
+      { token },
+      {
+        $set: {
+          token: newToken,
+          updatedAt: new Date(),
+        },
+      }
+    );
+  } else {
+    await usersSessionsCollection.updateOne(
+      { token },
+      {
+        $set: {
+          updatedAt: new Date(),
+        },
+      }
+    );
+  }
 
   res.send({ token: newToken });
 });

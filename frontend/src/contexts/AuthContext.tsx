@@ -1,7 +1,7 @@
-import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 import useLocalStorage from "../hooks/useLocalStorage";
+import backendInstance from "../utils/backendInstance";
 
 interface AuthContextValue {
   isLoggedIn: boolean;
@@ -47,8 +47,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     if (token !== "") {
-      axios
-        .get("/user", { headers: { Authorization: token } })
+      backendInstance
+        .get("/auth/me", { headers: { Authorization: token } })
         .then((response) => {
           setUser(response.data);
         })
@@ -62,7 +62,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const register = async (login: string, password: string) => {
     try {
-      const response = await axios.post("/register", { login, password });
+      const response = await backendInstance.post("/auth/register", {
+        login,
+        password,
+      });
       const { token: respToken } = response.data;
       setToken(respToken);
       setIsLoggedIn(true);
@@ -81,7 +84,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     try {
-      const response = await axios.get("/refresh", {
+      const response = await backendInstance.get("/auth/refresh", {
         headers: { Authorization: token },
       });
       const { token: respToken } = response.data;
@@ -97,7 +100,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = async (login: string, password: string) => {
     try {
-      const response = await axios.post("/login", { login, password });
+      const response = await backendInstance.post("/auth/login", {
+        login,
+        password,
+      });
       const { token: respToken } = response.data;
       setToken(respToken);
       setIsLoggedIn(true);
@@ -111,7 +117,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = async () => {
     try {
-      await axios.post("/logout", {}, { headers: { Authorization: token } });
+      await backendInstance.post(
+        "/auth/logout",
+        {},
+        { headers: { Authorization: token } }
+      );
       setToken("");
       setIsLoggedIn(false);
     } catch (error) {

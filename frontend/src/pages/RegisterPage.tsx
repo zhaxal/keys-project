@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../contexts/AuthContext";
 
+import { Link, Navigate } from "react-router-dom";
+
 interface FormData {
   login: string;
   password: string;
@@ -10,7 +12,7 @@ interface FormData {
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { register: registerHook } = useAuth();
+  const { register: registerHook, isLoggedIn } = useAuth();
   const {
     register,
     handleSubmit,
@@ -26,6 +28,10 @@ function RegisterPage() {
       console.error(error);
     }
   };
+
+  if (isLoggedIn) {
+    return <Navigate to="/admin" />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -81,6 +87,12 @@ function RegisterPage() {
             Register
           </button>
         </form>
+        <div className="text-sm text-center">
+          Already have an account?{" "}
+          <Link to="/login" className="text-indigo-600">
+            Login
+          </Link>
+        </div>
       </div>
     </div>
   );

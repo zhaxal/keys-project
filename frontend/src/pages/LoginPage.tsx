@@ -1,13 +1,15 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../contexts/AuthContext";
 
+import { Link, Navigate } from "react-router-dom";
+
 interface FormData {
   login: string;
   password: string;
 }
 
 function LoginPage() {
-  const { login } = useAuth();
+  const { login, isLoggedIn } = useAuth();
 
   const {
     register,
@@ -23,6 +25,10 @@ function LoginPage() {
       console.error(error);
     }
   };
+
+  if (isLoggedIn) {
+    return <Navigate to="/admin" />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -69,9 +75,9 @@ function LoginPage() {
 
         <div className="text-sm text-center">
           Don't have an account?{" "}
-          <a href="/register" className="text-indigo-600 hover:underline">
+          <Link to="/register" className="text-indigo-600">
             Register
-          </a>
+          </Link>
         </div>
       </div>
     </div>

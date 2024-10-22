@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import recordsRouter from "./src/routes/recordsRouter";
+import authRouter from "./src/routes/authRouter";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/records", recordsRouter);
+app.use("/auth", authRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

@@ -1,5 +1,5 @@
 {
-  "name": "data-server",
+  "name": "keys-project",
   "version": "1.0.0",
   "description": "server for receiving gateway server data",
   "main": "index.js",

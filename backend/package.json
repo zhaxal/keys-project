@@ -1,5 +1,5 @@
 {
-  "name": "keys-project",
+  "name": "backend",
   "version": "1.0.0",
   "description": "server for receiving gateway server data",
   "main": "index.js",

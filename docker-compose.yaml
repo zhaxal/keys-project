@@ -8,7 +8,7 @@ services:
       args:
         VITE_BACKEND_URL: http://localhost:3001
     ports:
-      - "3002:4173"
+      - "3002:3000"
     depends_on:
       - backend
     restart: always
@@ -19,9 +19,22 @@ services:
       dockerfile: Dockerfile
     environment:
       - PORT=3001
+      - MONGO_URL=mongodb://mongo:27017
     ports:
       - "3001:3001"
+    depends_on:
+      - mongo
     restart: always
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: always
+
+volumes:
+  mongodb_data:
 
 networks:
   default:

@@ -1,11 +1,14 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 
 import authRouter from "./src/routes/authRouter";
 import userRouter from "./src/routes/userRouter";
 import recordsRouter from "./src/routes/recordsRouter";
 
 import recordsRouterApi from "./src/routes/api/recordsRouter";
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT;

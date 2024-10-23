@@ -12,7 +12,7 @@ interface ApiTokenResponse {
 function ApiPage() {
   const { token } = useAuth();
 
-  const { data, isLoading } = useQuery({
+  const { data: apiTokenData, isLoading: isApiTokenLoading } = useQuery({
     queryKey: ["apiToken"],
     queryFn: async () => {
       try {
@@ -33,16 +33,16 @@ function ApiPage() {
   });
 
   const copyToClipboard = () => {
-    if (!data?.apiToken) {
+    if (!apiTokenData?.apiToken) {
       return;
     }
 
-    navigator.clipboard.writeText(data.apiToken).then(() => {
+    navigator.clipboard.writeText(apiTokenData.apiToken).then(() => {
       alert("API key copied to clipboard");
     });
   };
 
-  if (isLoading) {
+  if (isApiTokenLoading) {
     return <div>Loading...</div>;
   }
 
@@ -53,7 +53,7 @@ function ApiPage() {
         <div className="flex items-center space-x-2">
           <input
             type="password"
-            value={data?.apiToken}
+            value={apiTokenData?.apiToken}
             readOnly
             className="flex-grow px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />

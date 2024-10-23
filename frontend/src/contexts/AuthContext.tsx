@@ -7,6 +7,7 @@ interface AuthContextValue {
   isLoggedIn: boolean;
   loading: boolean;
   user: User | null;
+  token: string;
   login: (login: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   register: (login: string, password: string) => Promise<void>;
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextValue>({
   isLoggedIn: false,
   loading: true,
   user: null,
+  token: "",
   login: async () => {},
   logout: async () => {},
   register: async () => {},
@@ -138,6 +140,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         user,
         isLoggedIn,
         loading,
+        token,
         refreshToken,
         register,
         login,

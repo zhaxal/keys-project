@@ -10,6 +10,7 @@ interface Records {
   updatedAt: Date;
   humidity: number;
   temperature: number;
+  deviceTime: Date;
   userId: ObjectId;
 }
 

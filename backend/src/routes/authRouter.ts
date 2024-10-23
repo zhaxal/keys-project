@@ -43,7 +43,7 @@ authRouter.post("/logout", async (req, res) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    res.status(400).send("Token is required");
+    res.status(401).send("Unauthorized");
     return;
   }
 
@@ -103,7 +103,7 @@ authRouter.get("/refresh", async (req, res) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    res.status(400).send("Token is required");
+    res.status(401).send("Unauthorized");
     return;
   }
 
@@ -112,7 +112,7 @@ authRouter.get("/refresh", async (req, res) => {
   });
 
   if (!userSession) {
-    res.status(401).send("Invalid token");
+    res.status(401).send("Unauthorized");
     return;
   }
 
@@ -150,7 +150,7 @@ authRouter.get("/me", async (req, res) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    res.status(400).send("Token is required");
+    res.status(401).send("Unauthorized");
     return;
   }
 
@@ -159,7 +159,7 @@ authRouter.get("/me", async (req, res) => {
   });
 
   if (!userSession) {
-    res.status(401).send("Invalid token");
+    res.status(401).send("Unauthorized");
     return;
   }
 

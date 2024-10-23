@@ -8,7 +8,7 @@ import recordsRouter from "./src/routes/recordsRouter";
 import recordsRouterApi from "./src/routes/api/recordsRouter";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());

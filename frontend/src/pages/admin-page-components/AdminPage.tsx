@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import { useAuth } from "../../contexts/AuthContext";
 import backendInstance from "../../utils/backendInstance";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface Record {
   humidity: number;

@@ -13,12 +13,9 @@ authRouter.post("/login", async (req, res) => {
     return;
   }
 
-  const user = await usersCollection.findOne({
-    login,
-    password: bcrypt.hashSync(password, 8),
-  });
+  const user = await usersCollection.findOne({ login });
 
-  if (!user) {
+  if (!user || !bcrypt.compareSync(password, user.password)) {
     res.status(401).send("Invalid login or password");
     return;
   }

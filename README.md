@@ -48,7 +48,7 @@ keys-project/
 
 1. Clone the repository:
   ```sh
-  git clone https://github.com/your-username/keys-project.git
+  git clone https://github.com/zhaxal/keys-project.git
   cd keys-project
   ```
 
